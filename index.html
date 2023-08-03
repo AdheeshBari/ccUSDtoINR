@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ONline Currency converter</title>
+    <style>
+      * {
+        font-size: 40px;
+      }
+      body {
+        background-color: lightblue;
+      }
+    </style>
+    <script>
+      function exchange() {
+        event.preventDefault();
+        let amt = document.getElementById("amt");
+        let ans = document.getElementById("ans");
+
+        if (amt.value == "") {
+          alert("Please enter  a value");
+          ans.innerHTML = "";
+          amt.focus();
+          return;
+        }
+
+        let aid = parseFloat(amt.value);
+
+        let url = "https://api.exchangerate-api.com/v4/latest/USD";
+        let dollar = 0.0;
+
+        fetch(url)
+          .then((res) => res.json())
+          .then((data) => {
+            dollar = data.rates.INR;
+            let air = aid * dollar;
+            let msg = "\u20B9" + air.toFixed(2);
+            ans.innerHTML = msg;
+          })
+          .catch((err) => {
+            ans.innerHTML = "issue" + err;
+          });
+      }
+    </script>
+  </head>
+  <body>
+    <center>
+      <h1>Dollar to INR converter</h1>
+      <form onsubmit="exchange()">
+        <input type="number" step="any" placeholder="enter amt in $" id="amt" />
+        <br /><br />
+        <input type="submit" value="convert" />
+      </form>
+      <h2 id="ans"></h2>
+    </center>
+  </body>
+</html>
